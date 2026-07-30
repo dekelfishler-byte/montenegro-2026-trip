@@ -354,6 +354,37 @@ main { flex: 1; display: grid; grid-template-columns: 1fr; max-width: 960px; wid
 .backup-import-label { position: relative; }
 .backup-status { margin-top: var(--space-2); font-size: 13px; color: var(--color-accent-2-700); min-height: 1em; }
 
+/* trip-prep checklist ("הכנות") */
+.prep-view p { margin: 0 0 var(--space-3); }
+.prep-summary { font-size: 13px; color: var(--color-neutral-700); margin-bottom: var(--space-1); }
+.prep-progress { margin-bottom: var(--space-4); }
+.prep-group { margin-bottom: var(--space-4); min-width: 0; }
+.prep-group h3 { font-size: 16px; margin-bottom: var(--space-2); }
+.prep-task {
+  border: 1px solid var(--color-divider); background: var(--color-surface);
+  padding: var(--space-3); margin-bottom: var(--space-2);
+  display: flex; flex-direction: column; gap: 6px; min-width: 0;
+}
+.prep-task-main { display: flex; align-items: flex-start; gap: var(--space-2); flex-wrap: wrap; min-width: 0; }
+.prep-task-check { display: flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; cursor: pointer; flex: none; }
+.prep-task-check input { width: 22px; height: 22px; cursor: pointer; }
+.prep-task-title-wrap { flex: 1; min-width: 0; }
+.prep-task-title { margin: 0; overflow-wrap: anywhere; }
+.prep-task.prep-completed .prep-task-title { text-decoration: line-through; opacity: .7; }
+.prep-task-date { font-size: 13px; color: var(--color-neutral-700); margin-top: 2px; }
+.prep-overdue { font-weight: 800; color: #8a2a22; }
+.prep-category { flex: none; }
+.prep-irrelevant-note { font-size: 13px; color: var(--color-neutral-700); font-style: italic; margin: 0; }
+.prep-task.prep-irrelevant { opacity: .6; }
+.prep-task-details { margin: 0; font-size: 14px; opacity: .85; overflow-wrap: anywhere; }
+.prep-task-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.prep-task-note-label { font-size: 13px; color: var(--color-neutral-700); display: flex; flex-direction: column; gap: 4px; }
+.prep-task-note {
+  border-color: var(--color-accent-2-600); background: var(--color-accent-2-100);
+  width: 100%; min-height: 44px; font-family: var(--font-body); font-size: 14px;
+  padding: 6px 8px; resize: vertical;
+}
+
 /* reorder / delete controls */
 .reorder-controls { display: flex; gap: var(--space-2); margin-top: var(--space-2); }
 .btn-icon {

@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const SCHEMA_VERSION = 1;
+  const SCHEMA_VERSION = 2;
 
   const TAG_META = {
     mandatory: { cls: '', label: 'חובה' },
@@ -72,6 +72,81 @@
     'https://www.sipurderech.co.il/מונטנגרו/מונטנגרו-בשישה-ימים',
     'https://www.sipurderech.co.il/מונטנגרו/שבוע-במונטנגרו',
     'https://adhatyul.com/2025/01/15/טיול-וחופשה-במונטנגרו-היפה-חלק-ב/'
+  ];
+
+  const PREP_CATEGORY_META = {
+    booking: 'להזמין', decision: 'להחליט', documents: 'מסמכים', check: 'לבדוק', packing: 'לארוז'
+  };
+
+  const TRIP_PREP_TASKS = [
+    { id: 'prep-plan-day4', dueDate: '2026-08-02', category: 'decision',
+      title: 'לבחור את המסלול של 21 בספטמבר',
+      details: 'להחליט בין Ostrog לבין Biogradsko Jezero. הבחירה משפיעה על זמני הנהיגה והערב ב-Sveti Stefan.' },
+    { id: 'prep-plan-day5', dueDate: '2026-08-02', category: 'decision',
+      title: 'לבחור את המסלול של 22 בספטמבר',
+      details: 'להחליט בין Blue Cave, קוטור הקלאסי, Lipa Cave או Lovćen. אפשר לשנות את הבחירה בהמשך.' },
+    { id: 'prep-rafting-book', dueDate: '2026-08-03', category: 'booking',
+      title: 'להזמין רפטינג ל-4 משתתפים',
+      details: 'אימא ואחותי שבהריון אינן משתתפות. לאשר את שעת המפגש הסופית ואת נקודת המפגש: המשרד בז׳בליאק או גשר טארה.',
+      href: 'https://durmitoradventure.com/tara-rafting/' },
+    { id: 'prep-bookings-check', dueDate: '2026-08-05', category: 'check',
+      title: 'לוודא שכל ההזמנות המרכזיות סגורות',
+      details: 'טיסות, Villa Tara, Hotel Pima ורכב שכור לשישה מבוגרים ולמזוודות.' },
+    { id: 'prep-bluecave-book', dueDate: '2026-08-07', category: 'booking',
+      title: 'לבחור ולהזמין סיור Blue Cave בבוקר',
+      details: 'רלוונטי רק אם נבחר מסלול Blue Cave. כדי להשאיר זמן לרכבל, צריך סיור בוקר שחוזר לקוטור בערך עד 13:00. לאשר מפעיל, שעה, נקודת יציאה וחזרה, משך, ביטול ומדיניות מזג אוויר.',
+      href: 'https://montenegrosubmarine.me/tours/bay-of-kotor-and-blue-cave-adventure-3h',
+      planCondition: { day: 5, plans: ['bluecave'] } },
+    { id: 'prep-lipacave-tickets', dueDate: '2026-08-14', category: 'booking',
+      title: 'להחליט אם לרכוש כרטיסי Lipa Cave מראש',
+      details: 'רלוונטי רק למסלול Lipa Cave. התכנון הוא סיור 14:30 והגעה לחניה ב-14:00. אפשר לרכוש מראש או במקום.',
+      href: 'https://lipa-cave.me/how-and-when-to-buy-tickets-for-lipa-cave/',
+      planCondition: { day: 5, plans: ['lipacave'] } },
+    { id: 'prep-cablecar-tickets', dueDate: '2026-09-01', category: 'booking',
+      title: 'להחליט אם לרכוש כרטיסי רכבל קוטור מראש',
+      details: 'רלוונטי למסלולים הכוללים את הרכבל. עדיף להמתין עד שהתוכנית ברורה, משום שהפעילות תלויה במזג האוויר וברוח.',
+      href: 'https://www.kotorcablecar.me/plan-your-visit/tickets',
+      planCondition: { day: 5, plans: ['bluecave', 'classic', 'lipacave', 'lovcen'] } },
+    { id: 'prep-lovcen-daylight', dueDate: '2026-09-05', category: 'check',
+      title: 'לבדוק את תוכנית Lovćen מול שעות האור',
+      details: 'רלוונטי רק למסלול Lovćen. לוודא שמסיימים את הביקור עד 18:30 ושכולם מוכנים ל-461 מדרגות.',
+      planCondition: { day: 5, plans: ['lovcen'] } },
+    { id: 'prep-passports', dueDate: '2026-08-20', category: 'documents',
+      title: 'לבדוק את תוקף כל הדרכונים',
+      details: 'הדרכונים צריכים להיות תקפים לפחות שלושה חודשים לאחר היציאה המתוכננת ממונטנגרו. כרגע ישראלים אינם צריכים ויזה לביקור קצר.' },
+    { id: 'prep-car-confirm', dueDate: '2026-08-20', category: 'check',
+      title: 'לאשר את פרטי הרכב השכור',
+      details: 'מקום לשישה מבוגרים ולמזוודות, סוג הגיר, הנהגים הרשומים, פיקדון, כרטיס האשראי הנדרש, ביטוח ושעות האיסוף וההחזרה.' },
+    { id: 'prep-travel-insurance', dueDate: '2026-08-25', category: 'documents',
+      title: 'לרכוש ביטוח נסיעות',
+      details: 'לוודא כיסוי מתאים לכל המשתתפים, כולל תנאי ההריון של אחותי והפעילויות המתוכננות. אימא ואחותי אינן משתתפות ברפטינג.' },
+    { id: 'prep-save-confirmations', dueDate: '2026-09-01', category: 'check',
+      title: 'לשמור עותקים של כל האישורים',
+      details: 'טיסות, מלונות, רכב, ביטוח, רפטינג וכל פעילות שהוזמנה. לשמור גם בטלפון וגם בתיקייה זמינה אופליין.' },
+    { id: 'prep-esim-maps', dueDate: '2026-09-05', category: 'check',
+      title: 'להכין אינטרנט וניווט',
+      details: 'לבחור eSIM או חבילת נדידה ולהוריד מפות אופליין של צפון מונטנגרו, קוטור ובודווה.' },
+    { id: 'prep-recheck-info', dueDate: '2026-09-10', category: 'check',
+      title: 'לבדוק מחדש את המידע המשתנה',
+      details: 'שעות רכבל קוטור, Lipa Cave, Savin Kuk, מצב הכבישים, לוח הקרוזים בקוטור וגישה לאתרים. אין לשנות את המסלול אוטומטית.' },
+    { id: 'prep-reconfirm-bookings', dueDate: '2026-09-14', category: 'check',
+      title: 'לאשר מחדש את ההזמנות',
+      details: 'רפטינג, Blue Cave או Lipa Cave לפי המסלול שנבחר. לוודא שעה, מיקום מפגש, מספר משתתפים ומדיניות ביטול.' },
+    { id: 'prep-packing', dueDate: '2026-09-15', category: 'packing',
+      title: 'להכין ציוד לפי הפעילויות',
+      details: 'נעלי הליכה, שכבה חמה למערה ולהרים, מעילי גשם, בגדי ים, מגבות, קרם הגנה, תרופות ומטענים.' },
+    { id: 'prep-flight-checkin', dueDate: '2026-09-17', category: 'check',
+      title: 'לבצע צ׳ק-אין לטיסה',
+      details: 'לבצע כאשר חברת התעופה פותחת את הצ׳ק-אין ולשמור את כרטיסי העלייה למטוס אופליין.' },
+    { id: 'prep-final-check', dueDate: '2026-09-17', category: 'documents',
+      title: 'בדיקה אחרונה לפני היציאה',
+      details: 'דרכונים, רישיונות נהיגה, כרטיס אשראי של השוכר, ביטוח, שוברים, מזומן, טלפונים ומטענים.' },
+    { id: 'prep-rafting-tomorrow', dueDate: '2026-09-19', category: 'check',
+      title: 'לאשר את הרפטינג של מחר',
+      details: 'לאשר שעה ונקודת מפגש לארבעת המשתתפים ולוודא שהציוד וההסעה כלולים.' },
+    { id: 'prep-day5-plan-confirm', dueDate: '2026-09-21', category: 'check',
+      title: 'לאשר את תוכנית 22 בספטמבר',
+      details: 'לבדוק מזג אוויר, רוח, מצב הים ושעות הפעילות. להחליט סופית אם מבצעים Blue Cave, קוטור הקלאסי, Lipa Cave או Lovćen.' }
   ];
 
   const DAYS = [
@@ -369,12 +444,37 @@
     return rec ? rec.id : plans[0].id;
   }
 
+  // A prep task with no planCondition is always relevant. Otherwise it's relevant
+  // only when the day's currently selected plan (or its default) is in the list.
+  function isPrepTaskRelevant(task) {
+    if (!task.planCondition) return true;
+    const { day, plans } = task.planCondition;
+    const selected = state.selectedPlans[day] || defaultPlanFor(day);
+    return plans.includes(selected);
+  }
+
   // ---- input sanitization (shared by localStorage load and file import) ----
   function isValidDay(day) { return Number.isInteger(day) && day >= 1 && day <= DAYS.length; }
   function isValidPlan(day, planId) { return DAYS[day - 1].plans.some(p => p.id === planId); }
   function allStopIdsForPlan(day, planId) {
     const plan = DAYS[day - 1].plans.find(p => p.id === planId);
     return plan ? plan.stops.map(s => s.id) : [];
+  }
+
+  function isValidPrepId(id) { return TRIP_PREP_TASKS.some(t => t.id === id); }
+  function sanitizePrepCompleted(raw) {
+    const out = {};
+    if (raw && typeof raw === 'object') {
+      Object.keys(raw).forEach(id => { if (isValidPrepId(id) && typeof raw[id] === 'boolean') out[id] = raw[id]; });
+    }
+    return out;
+  }
+  function sanitizePrepNotes(raw) {
+    const out = {};
+    if (raw && typeof raw === 'object') {
+      Object.keys(raw).forEach(id => { if (isValidPrepId(id) && typeof raw[id] === 'string') out[id] = raw[id].slice(0, 500); });
+    }
+    return out;
   }
 
   // Migrates the pre-multi-plan overrides shape ({day: {dayNote,...}}) into the
@@ -511,7 +611,7 @@
   }
 
   // ---- state ----
-  const state = { activeDay: 0, completed: {}, altOpen: {}, overrides: {}, editMode: false, selectedPlans: {}, compareOpen: false, fontSize: 'normal', online: navigator.onLine };
+  const state = { activeDay: 0, completed: {}, altOpen: {}, overrides: {}, editMode: false, selectedPlans: {}, compareOpen: false, fontSize: 'normal', online: navigator.onLine, prepCompleted: {}, prepNotes: {} };
 
   try {
     const raw = localStorage.getItem('mn2026-overrides');
@@ -535,9 +635,28 @@
     state.fontSize = sanitizeFontSize(localStorage.getItem('mn2026-fontsize'), state.fontSize);
   } catch (e) {}
 
+  try {
+    const raw = localStorage.getItem('mn2026-prep-completed');
+    if (raw) state.prepCompleted = sanitizePrepCompleted(JSON.parse(raw));
+  } catch (e) {}
+
+  try {
+    const raw = localStorage.getItem('mn2026-prep-notes');
+    if (raw) state.prepNotes = sanitizePrepNotes(JSON.parse(raw));
+  } catch (e) {}
+
   function saveCompleted() {
     try { localStorage.setItem('mn2026-completed', JSON.stringify(state.completed)); } catch (e) {}
   }
+  function savePrepCompleted() {
+    try { localStorage.setItem('mn2026-prep-completed', JSON.stringify(state.prepCompleted)); } catch (e) {}
+  }
+  function savePrepNotes() {
+    try { localStorage.setItem('mn2026-prep-notes', JSON.stringify(state.prepNotes)); } catch (e) {}
+  }
+  function togglePrepTask(id) { state.prepCompleted[id] = !state.prepCompleted[id]; savePrepCompleted(); render(); }
+  function updatePrepNote(id, value) { state.prepNotes[id] = value.slice(0, 500); savePrepNotes(); }
+  function resetPrepTasks() { state.prepCompleted = {}; state.prepNotes = {}; savePrepCompleted(); savePrepNotes(); render(); }
   function saveOverrides() {
     try { localStorage.setItem('mn2026-overrides', JSON.stringify(state.overrides)); } catch (e) {}
   }
@@ -674,8 +793,9 @@
     const el = document.activeElement;
     if (!el || typeof el.matches !== 'function' || !el.matches('[data-field]')) return;
     const field = el.getAttribute('data-field');
-    const day = Number(el.getAttribute('data-day'));
     const id = el.getAttribute('data-id');
+    if (field === 'prepNote') { updatePrepNote(id, el.value); return; }
+    const day = Number(el.getAttribute('data-day'));
     commitField(day, field, id, el.value);
   }
 
@@ -728,6 +848,7 @@
   function updateHash(day, planId) {
     let hash;
     if (day === 'info') hash = '#info';
+    else if (day === 'prep') hash = '#prep';
     else if (day === 0) hash = '#day=0';
     else hash = '#day=' + day + (planId ? '&plan=' + planId : '');
     try { history.replaceState(null, '', hash); } catch (e) { location.hash = hash; }
@@ -736,6 +857,7 @@
   function parseHash() {
     const h = location.hash.replace(/^#/, '');
     if (h === 'info') return { day: 'info' };
+    if (h === 'prep') return { day: 'prep' };
     const params = new URLSearchParams(h);
     const day = params.get('day');
     return { day: day != null ? Number(day) : null, plan: params.get('plan') };
@@ -750,6 +872,7 @@
 
   function selectDay(i) { state.activeDay = i; state.compareOpen = false; updateHash(i, i >= 1 ? getSelectedPlan(i) : null); render(); window.scrollTo(0, 0); }
   function selectInfo() { state.activeDay = 'info'; state.compareOpen = false; updateHash('info'); render(); window.scrollTo(0, 0); }
+  function selectPrep() { state.activeDay = 'prep'; state.editMode = false; state.compareOpen = false; updateHash('prep'); render(); window.scrollTo(0, 0); }
   function goPrev() { if (typeof state.activeDay !== 'number') return; state.activeDay = Math.max(1, state.activeDay - 1); state.compareOpen = false; updateHash(state.activeDay, getSelectedPlan(state.activeDay)); render(); window.scrollTo(0, 0); }
   function goNext() { if (typeof state.activeDay !== 'number') return; state.activeDay = Math.min(DAYS.length, state.activeDay + 1); state.compareOpen = false; updateHash(state.activeDay, getSelectedPlan(state.activeDay)); render(); window.scrollTo(0, 0); }
   function toggleDone(id) { state.completed[id] = !state.completed[id]; saveCompleted(); render(); }
@@ -1199,18 +1322,124 @@
       </main>`;
   }
 
+  function isoFromDate(d) {
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  }
+  function todayISOString() { return isoFromDate(new Date()); }
+
+  const PREP_TRIP_START = '2026-09-18';
+  const PREP_TRIP_END = '2026-09-23';
+
+  function prepTaskGroup(task, todayIso, weekIso) {
+    if (!isPrepTaskRelevant(task)) return 'other-plan';
+    if (state.prepCompleted[task.id]) return 'done';
+    if (task.dueDate >= PREP_TRIP_START && task.dueDate <= PREP_TRIP_END) return 'during-trip';
+    if (task.dueDate < todayIso) return 'overdue';
+    if (task.dueDate <= weekIso) return 'this-week';
+    return 'later';
+  }
+
+  function prepTaskCardHtml(task, todayIso) {
+    const done = !!state.prepCompleted[task.id];
+    const relevant = isPrepTaskRelevant(task);
+    const duringTrip = task.dueDate >= PREP_TRIP_START && task.dueDate <= PREP_TRIP_END;
+    const overdue = relevant && !done && !duringTrip && task.dueDate < todayIso;
+    const dateHe = esc(new Date(task.dueDate + 'T00:00:00').toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' }));
+    const note = state.prepNotes[task.id] || '';
+    const cardClasses = ['prep-task'];
+    if (done) cardClasses.push('prep-completed');
+    if (!relevant) cardClasses.push('prep-irrelevant');
+    return `
+      <div class="${cardClasses.join(' ')}">
+        <div class="prep-task-main">
+          <label class="prep-task-check">
+            <input type="checkbox" data-action="toggle-prep-task" data-id="${esc(task.id)}" ${done ? 'checked' : ''} aria-label="סמן כבוצע: ${esc(task.title)}">
+          </label>
+          <div class="prep-task-title-wrap">
+            <h4 class="prep-task-title">${esc(task.title)}</h4>
+            <div class="prep-task-date">${dateHe}${overdue ? ' · <span class="prep-overdue">באיחור</span>' : ''}</div>
+          </div>
+          <span class="tag prep-category">${esc(PREP_CATEGORY_META[task.category])}</span>
+        </div>
+        ${!relevant ? '<p class="prep-irrelevant-note">לא רלוונטי לבחירה הנוכחית</p>' : ''}
+        <p class="prep-task-details">${esc(task.details)}</p>
+        <div class="prep-task-actions">
+          ${task.href ? `<a class="btn btn-secondary" href="${esc(task.href)}" target="_blank" rel="noopener noreferrer">פתיחת האתר</a>` : ''}
+        </div>
+        <label class="prep-task-note-label">הערה שלי
+          <textarea class="edit-textarea note-input prep-task-note" data-field="prepNote" data-id="${esc(task.id)}" placeholder="הערה שלי" aria-label="הערה שלי עבור ${esc(task.title)}">${esc(note)}</textarea>
+        </label>
+      </div>`;
+  }
+
+  function renderPrep() {
+    const todayIso = todayISOString();
+    const weekDate = new Date();
+    weekDate.setDate(weekDate.getDate() + 7);
+    const weekIso = isoFromDate(weekDate);
+
+    const sorted = TRIP_PREP_TASKS.slice().sort((a, b) => a.dueDate.localeCompare(b.dueDate));
+    const groups = { overdue: [], 'this-week': [], later: [], 'during-trip': [], 'other-plan': [], done: [] };
+    sorted.forEach(t => groups[prepTaskGroup(t, todayIso, weekIso)].push(t));
+
+    const groupDefs = [
+      ['overdue', 'באיחור'],
+      ['this-week', 'השבוע'],
+      ['later', 'בהמשך'],
+      ['during-trip', 'במהלך הטיול'],
+      ['other-plan', 'תלוי במסלול אחר'],
+      ['done', 'הושלמו']
+    ];
+
+    const groupsHtml = groupDefs.filter(([key]) => groups[key].length).map(([key, label]) => `
+      <div class="prep-group">
+        <h3>${esc(label)}</h3>
+        ${groups[key].map(t => prepTaskCardHtml(t, todayIso)).join('')}
+      </div>`).join('');
+
+    const totalCount = TRIP_PREP_TASKS.length;
+    const doneCount = TRIP_PREP_TASKS.filter(t => state.prepCompleted[t.id]).length;
+    const pct = totalCount ? Math.round((doneCount / totalCount) * 100) : 0;
+
+    return `
+      ${tabsHtml()}
+      <main>
+        <section>
+          <div class="section-pad prep-view">
+            <h2>הכנות לטיול</h2>
+            <p>דברים שצריך להזמין, לאשר ולהכין לקראת היציאה.</p>
+            <div class="prep-summary">${doneCount} מתוך ${totalCount} משימות הושלמו</div>
+            <div class="progress-track prep-progress" role="progressbar" aria-label="התקדמות בהכנות לטיול" aria-valuemin="0" aria-valuemax="${totalCount}" aria-valuenow="${doneCount}">
+              <div class="progress-fill" style="width:${pct}%"></div>
+            </div>
+            ${groupsHtml}
+            <button class="btn btn-ghost" data-action="reset-prep">איפוס סימוני ההכנות</button>
+          </div>
+        </section>
+      </main>`;
+  }
+
   function tabsHtml() {
-    const tabs = [{ index: 0, top: 'בית', sub: '' }, ...DAYS.map((d, i) => ({ index: i + 1, top: d.top, sub: d.sub }))];
-    const items = tabs.map(t => `
-      <button class="${t.index === state.activeDay ? 'active' : ''}" data-action="select" data-day="${t.index}" ${t.index === state.activeDay ? 'aria-current="true"' : ''}>
+    const tabs = [
+      { index: 0, top: 'בית', sub: '' },
+      { index: 'prep', top: 'הכנות', sub: 'לפני הטיול' },
+      ...DAYS.map((d, i) => ({ index: i + 1, top: d.top, sub: d.sub }))
+    ];
+    const items = tabs.map(t => {
+      const isActive = t.index === state.activeDay;
+      const action = t.index === 'prep' ? 'data-action="select-prep"' : `data-action="select" data-day="${t.index}"`;
+      return `
+      <button class="${isActive ? 'active' : ''}" ${action} ${isActive ? 'aria-current="true"' : ''}>
         <span class="tab-top">${esc(t.top)}</span>
         <span class="tab-sub">${esc(t.sub)}</span>
-      </button>`).join('');
+      </button>`;
+    }).join('');
     return `<div class="scroll-hint"><nav class="day-tabs">${items}</nav></div>`;
   }
 
   function exportJson() {
-    const data = { schemaVersion: SCHEMA_VERSION, selectedPlans: state.selectedPlans, completed: state.completed, overrides: state.overrides, fontSize: state.fontSize };
+    const data = { schemaVersion: SCHEMA_VERSION, selectedPlans: state.selectedPlans, completed: state.completed, overrides: state.overrides, fontSize: state.fontSize, prepCompleted: state.prepCompleted, prepNotes: state.prepNotes };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -1220,7 +1449,8 @@
   }
 
   function hasExistingData() {
-    return Object.keys(state.completed).length > 0 || Object.keys(state.overrides).length > 0 || Object.keys(state.selectedPlans).length > 0;
+    return Object.keys(state.completed).length > 0 || Object.keys(state.overrides).length > 0 || Object.keys(state.selectedPlans).length > 0
+      || Object.keys(state.prepCompleted).length > 0 || Object.keys(state.prepNotes).length > 0;
   }
 
   function importJsonData(data, skipConfirm) {
@@ -1236,15 +1466,20 @@
       return false;
     }
     // Fully sanitize before touching state, so a malformed file never causes a partial write.
+    // A schemaVersion-1 backup has no prepCompleted/prepNotes keys, so these sanitize to {} naturally.
     const overrides = sanitizeOverrides(migrateOverrides(data.overrides));
     const selectedPlans = sanitizeSelectedPlans(data.selectedPlans);
     const completed = sanitizeCompleted(data.completed, overrides);
     const fontSize = sanitizeFontSize(data.fontSize, state.fontSize);
+    const prepCompleted = sanitizePrepCompleted(data.prepCompleted);
+    const prepNotes = sanitizePrepNotes(data.prepNotes);
     state.overrides = overrides;
     state.selectedPlans = selectedPlans;
     state.completed = completed;
     state.fontSize = fontSize;
-    saveSelectedPlans(); saveCompleted(); saveOverrides(); saveFontSize();
+    state.prepCompleted = prepCompleted;
+    state.prepNotes = prepNotes;
+    saveSelectedPlans(); saveCompleted(); saveOverrides(); saveFontSize(); savePrepCompleted(); savePrepNotes();
     applyFontSize();
     render();
     return true;
@@ -1276,7 +1511,10 @@
 
   function render() {
     const app = document.getElementById('app');
-    const body = state.activeDay === 'info' ? renderInfo() : (state.activeDay === 0 ? renderHome() : renderDay(state.activeDay));
+    const body = state.activeDay === 'info' ? renderInfo()
+      : state.activeDay === 'prep' ? renderPrep()
+      : state.activeDay === 0 ? renderHome()
+      : renderDay(state.activeDay);
     app.innerHTML = `
       <header class="nav">
         <div class="nav-brand">מונטנגרו 2026</div>
@@ -1297,6 +1535,12 @@
     const action = el.getAttribute('data-action');
     if (action === 'select') { selectDay(Number(el.getAttribute('data-day'))); return; }
     if (action === 'select-info') { selectInfo(); return; }
+    if (action === 'select-prep') { selectPrep(); return; }
+    if (action === 'toggle-prep-task') { togglePrepTask(el.getAttribute('data-id')); return; }
+    if (action === 'reset-prep') {
+      if (confirm('לאפס את כל סימוני ההשלמה וההערות ברשימת ההכנות?')) resetPrepTasks();
+      return;
+    }
     if (action === 'prev') { goPrev(); return; }
     if (action === 'next') { goNext(); return; }
     if (action === 'toggle-done') { toggleDone(el.getAttribute('data-id')); return; }
@@ -1373,8 +1617,9 @@
     const el = e.target.closest('[data-field]');
     if (!el) return;
     const field = el.getAttribute('data-field');
-    const day = Number(el.getAttribute('data-day'));
     const id = el.getAttribute('data-id');
+    if (field === 'prepNote') { updatePrepNote(id, el.value); return; }
+    const day = Number(el.getAttribute('data-day'));
     commitField(day, field, id, el.value);
   });
 
@@ -1390,6 +1635,8 @@
     const parsed = parseHash();
     if (parsed.day === 'info') {
       state.activeDay = 'info';
+    } else if (parsed.day === 'prep') {
+      state.activeDay = 'prep';
     } else if (parsed.day != null && !isNaN(parsed.day) && parsed.day >= 0 && parsed.day <= DAYS.length) {
       state.activeDay = parsed.day;
       if (parsed.plan && parsed.day >= 1 && DAYS[parsed.day - 1].plans.some(p => p.id === parsed.plan)) {
