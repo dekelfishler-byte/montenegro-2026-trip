@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mn2026-v5';
+const CACHE_NAME = 'mn2026-v6';
 const ASSETS = ['./', 'index.html', 'styles.css', 'app.js', 'manifest.webmanifest', 'icon.svg', 'icon-192.png', 'icon-512.png', 'assets/montenegro-group-photo.webp', 'assets/montenegro-group-photo.jpg'];
 
 self.addEventListener('install', (event) => {

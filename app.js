@@ -878,8 +878,8 @@
                 class="group-photo"
                 src="./assets/montenegro-group-photo.jpg"
                 alt=""
-                width="1600"
-                height="1067"
+                width="2528"
+                height="1684"
                 decoding="async"
                 fetchpriority="high"
               >
